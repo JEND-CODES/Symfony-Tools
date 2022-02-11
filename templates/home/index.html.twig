@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}HomeController{% endblock %}
+
+{% block body %}
+
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+
+    <p>NOMS DE TOUS LES CLIENTS (FIND ALL)</p>
+
+    {% for client in clients %}
+
+        <p style="color: orangered;">{{ client.name|raw }}</p>
+
+    {% endfor %}
+
+    <hr>
+
+    <p>NOM D'UN SEUL CLIENT RÉCUPÉRÉ EN PRÉCISANT SON ID</p>
+
+    <p style="color: orangered;">{{ one_client.name }}</p>
+
+    <hr>
+
+    <p>LISTE DE CLIENTS FILTRÉE SELON LA VALEUR MINIMALE ET LA VALEUR MAXIMALE D'IDS</p>
+
+    {% for client_item in clients_list %}
+
+        <p style="color: green;">{{ client_item.id|raw }}</p>
+
+    {% endfor %}
+
+    <hr>
+
+    <p>LISTE DE CLIENTS FILTRÉE EN FONCTION DU NOM DU THÈME QUI LEUR EST ASSOCIÉ</p>
+
+    {% for client_theme_name in clients_theme_name %}
+
+        <p style="color: red;">{{ client_theme_name.name|raw }}</p>
+
+        <p style="color: orange;">{{ client_theme_name.theme.name|raw }}</p>
+
+    {% endfor %}
+
+    <hr>
+
+    <p>LISTE DE CLIENTS FILTRÉE SELON L'ID DU THÈME QUI LEUR EST ASSOCIÉ</p>
+
+    {% for client_theme_id in clients_theme_id %}
+
+        <p style="color: cornflowerblue;">{{ client_theme_id.name|raw }}</p>
+
+        <p style="color: blue;">{{ client_theme_id.theme.id|raw }}</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
