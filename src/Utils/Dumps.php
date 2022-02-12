@@ -22,7 +22,7 @@ class Dumps
 
     }
 
-    // Vérifie dans un tableau de résultats si la longueur d'éléments textes est supérieure à un nombre
+    // Vérifie dans un tableau de résultats si les longueurs d'éléments textes sont supérieures à un nombre
     public function dumpGreaterThanInArray(array $itemsQueried, string $criteria, int $number) {
 
         $array = [];
@@ -52,7 +52,7 @@ class Dumps
 
     }
 
-    // Vérifie dans un tableau de résultats si la longueur d'éléments textes est inférieure à un nombre
+    // Vérifie dans un tableau de résultats si les longueurs d'éléments textes sont inférieures à un nombre
     public function dumpLessThanInArray(array $itemsQueried, string $criteria, int $number) {
 
         $array = [];
@@ -156,7 +156,7 @@ class Dumps
 
     }
 
-    // Dump d'informations d'entités reliés
+    // Dump d'informations d'entités reliées
     public function dumpInRelationMethod($itemsQueried, string $methodName, string $relatedMethod) {
 
         $method = 'get'.ucfirst($methodName);
@@ -171,7 +171,7 @@ class Dumps
 
     }
 
-    // Dump d'informations d'entités reliés depuis un tableau
+    // Dump d'informations d'entités reliées depuis un tableau
     public function dumpInRelationMethodInArray(array $itemsQueried, string $methodName, string $relatedMethod) {
 
         $array = [];
