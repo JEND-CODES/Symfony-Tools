@@ -7,4 +7,5 @@
 * createQueryBuilder
 * SerializerInterface
 * JsonEncode
+* Api Platform configurations
 ```
