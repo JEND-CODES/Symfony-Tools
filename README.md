@@ -6,6 +6,11 @@
 * Dumps
 * createQueryBuilder
 * SerializerInterface
-* JsonEncode
+* Json Encode / Json Decode
 * Api Platform configurations
+* StopWatch
+* Pagination
+* Curl Api
+* Services
+* Handlers
 ```
