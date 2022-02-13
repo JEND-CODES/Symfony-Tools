@@ -6,6 +6,7 @@ use App\Repository\ClientRepository;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\SerializerInterface;
@@ -112,6 +113,142 @@ class ProductController extends AbstractController
         ]);
 
         return $response;
+
+    }
+
+    /**
+     * @Route("/productsprices", name="products_prices", methods={"GET"})
+     * @param ProductRepository $repoProduct
+     * @return Response
+     */
+    public function productsPrices(ProductRepository $repoProduct): Response
+    {
+        $productsPrices = [];
+
+        $productsCount = $repoProduct->countProducts();
+
+        for ($i = 1; $i <= $productsCount; $i++) {
+
+            array_push(
+                $productsPrices, 
+                array(
+                    "title" => $repoProduct->find($i)->getTitle(),
+                    "price" => $repoProduct->find($i)->getPrice()
+                )
+            );
+        
+        }
+
+        $json_data = [];
+
+        array_push($json_data, $productsPrices);
+        
+        $json = json_encode($json_data);
+
+        $response = new Response($json, 200, [
+            "Content-Type" => "application/json",
+        ]);
+
+        return $response;
+
+    }
+
+    /**
+     * @Route("/product/{id}/price", name="product_price", requirements={"id": "\d+"}, methods={"GET"})
+     * @param ProductRepository $repoProduct
+     * @return Response
+     */
+    public function productPrice(ProductRepository $repoProduct, int $id): Response
+    {
+        $product_array = [];
+
+        array_push(
+            $product_array, 
+            array(
+                "title" => $repoProduct->find($id)->getTitle(),
+                "price" => $repoProduct->find($id)->getPrice()
+            )
+        );
+        
+        $json_data = json_encode($product_array);
+
+        $response = new Response($json_data, 200, [
+            "Content-Type" => "application/json",
+        ]);
+
+        return $response;
+
+    }
+
+    /**
+     * @Route("/productspagination", name="products_pagination", methods={"GET"})
+     * @param ProductRepository $repoProduct
+     * @return Response
+     */
+    public function jsonProductsPagination(ProductRepository $repoProduct, Request $request, SerializerInterface $serializer): Response
+    {
+        $startParam = $request->query->get('start');
+
+        $limitParam = $request->query->get('limit');
+
+        if (!$startParam && !$limitParam) {
+            // productspagination
+            $start = 0;
+            $limit = 3;
+
+        } elseif (!$startParam) {
+            // productspagination?limit=2
+            $start = 0;
+            $limit = (int) strip_tags($limitParam);
+
+        } elseif (!$limitParam) {
+            // productspagination?start=1
+            $start = (int) strip_tags($startParam);
+            $limit = 3;
+
+        } else {
+            // productspagination?start=1&limit=2
+            $start = (int) strip_tags($startParam);
+            $limit = (int) strip_tags($limitParam);
+        }
+
+        $products = $repoProduct->findBy(array(), array('id' => 'ASC'), $limit, $start);
+
+        $allProducts = $serializer->serialize($products, 'json');
+
+        $response = new Response($allProducts, 200, [
+            "Content-Type" => "application/json",
+        ]);
+
+        return $response;
+
+    }
+
+    /**
+     * @Route("/curltest", name="curl_test")
+     */
+    public function curlTest()
+    {
+        // $apiKey = 'MY_API_KEY';
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, 'https://randomuser.me/api/?gender=female&results=10');
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        // curl_setopt($ch, CURLOPT_HEADER, array('X-API-Key: ' . $apiKey));
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+
+        $json = json_decode(curl_exec($ch));
+        
+        $results = json_decode(curl_exec($ch))->results;
+
+        dd(
+            $json,
+            // $json->results,
+            $results
+        );
 
     }
 

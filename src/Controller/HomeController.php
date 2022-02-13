@@ -4,15 +4,12 @@ namespace App\Controller;
 
 use App\Repository\ClientRepository;
 use App\Repository\ProductRepository;
+use App\Utils\Delay;
 use App\Utils\Dumps;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
-// Lancer le live : php -S localhost:8000 -t public
-
-// Check Symfony Demo : https://github.com/symfony/demo
-// Checking Validator here : https://github.com/symfony/demo/blob/main/src/Utils/Validator.php
+use Symfony\Component\Stopwatch\Stopwatch;
 
 class HomeController extends AbstractController
 {
@@ -91,5 +88,66 @@ class HomeController extends AbstractController
             'clients_theme_name' => $clientsByThemeName,
             'clients_theme_id' => $clientsByThemeId
         ]);
+
     }
+
+    /**
+     * @Route("/watchhome", name="watch_home")
+     */
+    public function watchHomeQueries(ClientRepository $repoClient, Delay $delay)
+    {
+        $stopWatch = new Stopwatch();
+
+        $stopWatch->start('watchHomeQueries');
+
+        // sleep(1);
+
+        $stopWatch->lap('watchHomeQueries');
+
+        $delay->executionDelay(1);
+
+        $stopWatch->lap('watchHomeQueries');
+
+        $repoClient->findBy(array(), array('id' => 'ASC'));
+
+        $stopWatch->lap('watchHomeQueries');
+
+        $repoClient->find(1);
+
+        $stopWatch->lap('watchHomeQueries');
+
+        $repoClient->filterClientsByIdMinAndMax(1, 3);
+
+        $event = $stopWatch->stop('watchHomeQueries');
+
+        dd(
+            $event, 
+
+            $event->getPeriods(),
+
+            "Category the event was started in : " . 
+            $event->getCategory(),
+            
+            "Event start time in milliseconds : " . 
+            $event->getOrigin(), 
+
+            "Stops all periods not already stopped : " . 
+            $event->ensureStopped(), 
+            
+            "Start time of the very first period : " . 
+            $event->getStartTime(),  
+
+            "End time of the very last period : " . 
+            $event->getEndTime(),
+
+            "Event duration, including all periods : " . 
+            $event->getDuration(),   
+
+            "Max memory usage of all periods : " . 
+            $event->getMemory(), 
+
+        );
+
+    }
+
 }

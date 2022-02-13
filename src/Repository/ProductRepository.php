@@ -44,6 +44,16 @@ class ProductRepository extends ServiceEntityRepository
 
     }
 
+    // Retourne le nombre total de produits
+    public function countProducts()
+    {
+        $query = $this->createQueryBuilder('p')
+                ->select('count(p.id)')
+                ->getQuery();
+
+        return $query->getSingleScalarResult();
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */
