@@ -10,7 +10,7 @@
 * Api Platform configurations
 * StopWatch
 * Pagination
-* Curl Api
+* Curl Api (array_filter, array_map)
 * Services
 * Handlers
 ```
