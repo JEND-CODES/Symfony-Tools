@@ -224,32 +224,4 @@ class ProductController extends AbstractController
 
     }
 
-    /**
-     * @Route("/curltest", name="curl_test")
-     */
-    public function curlTest()
-    {
-        // $apiKey = 'MY_API_KEY';
-
-        $ch = curl_init();
-
-        curl_setopt($ch, CURLOPT_URL, 'https://randomuser.me/api/?gender=female&results=10');
-
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-
-        // curl_setopt($ch, CURLOPT_HEADER, array('X-API-Key: ' . $apiKey));
-        curl_setopt($ch, CURLOPT_HEADER, 0);
-
-        $json = json_decode(curl_exec($ch));
-        
-        $results = json_decode(curl_exec($ch))->results;
-
-        dd(
-            $json,
-            // $json->results,
-            $results
-        );
-
-    }
-
 }
