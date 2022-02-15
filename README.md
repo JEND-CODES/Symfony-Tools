@@ -9,8 +9,8 @@
 * Json Encode / Json Decode
 * Api Platform configurations
 * StopWatch
-* Calculation time request
-* Pagination (start & limit)
+* Calculation delay request
+* Pagination (start, limit)
 * Curl Api (array_filter, array_map)
 * Services
 * Handlers
