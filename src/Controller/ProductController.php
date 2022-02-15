@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ClientRepository;
 use App\Repository\ProductRepository;
+use App\Service\RequestService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -47,13 +48,14 @@ class ProductController extends AbstractController
      * @param ProductRepository $repoProduct
      * @return Response
      */
-    public function product(ProductRepository $repoProduct, int $id): Response
+    public function product(ProductRepository $repoProduct, int $id, RequestService $requestService): Response
     { 
         $product = $repoProduct->find($id);
 
         if(!$product) {
 
             $response = new JsonResponse([
+                'uri' => $requestService->getUriInfo(),
                 'error' => 'not found',
                 'http status' => '404'
             ]);
@@ -61,6 +63,7 @@ class ProductController extends AbstractController
         } else {
             
             $response = new JsonResponse([
+                'uri' => $requestService->getUriInfo(),
                 'result' => 'ok',
                 'http status' => '200',
                 'product' => [

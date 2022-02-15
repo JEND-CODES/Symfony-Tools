@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Repository\ClientRepository;
 use App\Repository\ProductRepository;
+use App\Service\RequestService;
 use App\Utils\Delay;
 use App\Utils\Dumps;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Stopwatch\Stopwatch;
@@ -15,10 +18,16 @@ class HomeController extends AbstractController
 {
     /**
      * @Route("/", name="home", methods={"GET"})
-     * @param ClientRepository $repoClient
-     * @return Response
      */
-    public function index(ClientRepository $repoClient, ProductRepository $repoProduct, Dumps $dumps): Response
+    public function index(
+        ClientRepository $repoClient, 
+        ProductRepository $repoProduct, 
+        Dumps $dumps, 
+        RequestService $requestService, 
+        $_route, 
+        Request $request, 
+        Delay $delay
+        ): Response
     {
         //*** DUMP CLIENTS : FIND ALL
         $clients = $repoClient->findBy(array(), array('id' => 'ASC'));
@@ -80,6 +89,21 @@ class HomeController extends AbstractController
         // $dumps->dumpIfSpecialCharactersInArray($products, 'title');
 
         // $dumps->dumpInRelationMethodInArray($products, 'client', 'name');
+
+        //*** SERVICE POUR RÉCUPÉRER DES INFOS SUR LA REQUÊTE EN COURS
+        // $requestInfo = $requestService->getRouteName();
+        // $requestInfo = $requestService->getController();
+        // $requestInfo = $requestService->getSessionInfos();
+        // $requestInfo = $requestService->getUriInfo();
+        // $requestInfo = $requestService->getPortInfo();
+        // dd($requestInfo);
+
+        // dd($_route);
+        // dd($request->getUri());
+        // dd($request->getPort());
+
+        //*** FAIRE UN AUDIT DU TEMPS D'AFFICHAGE DE LA PAGE D'ACCUEIL
+        // $delay->audit($request->server->get('REQUEST_TIME_FLOAT'), microtime(true));
 
         return $this->render('home/index.html.twig', [
             'clients' => $clients,
