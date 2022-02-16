@@ -63,6 +63,48 @@ class ClientRepository extends ServiceEntityRepository
 
     }
 
+    public function rawSqlQuery() 
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // EXEMPLES DE REQUÊTES SQL BRUTES
+
+        // $sql = 'SELECT *
+        //         FROM client
+        //         INNER JOIN product
+        //         WHERE client.id = product.id
+        //         ';
+
+        // $sql = 'SELECT *
+        //         FROM client
+        //         INNER JOIN product
+        //         ON client.id = product.id
+        //         INNER JOIN theme
+        //         ON client.theme_id = theme.id
+        //         ';
+
+        // La commande UNION de SQL permet de mettre bout-à-bout les résultats de plusieurs requêtes utilisant elles-même la commande SELECT.
+        // La commande UNION ALL de SQL est très similaire à la commande UNION. Elle permet de concaténer les enregistrements de plusieurs requêtes, à la seule différence que cette commande permet d’inclure tous les enregistrements, même les doublons. 
+        // $sql = 'SELECT `name` FROM client
+        //         UNION ALL
+        //         SELECT `title` FROM product
+        //         ';
+
+        $sql = "SELECT `id`, `name` FROM client
+                WHERE `name` = 'helloWorld'
+                UNION ALL
+                SELECT `id`, `title` FROM product
+                WHERE `title` = 'Product1'
+                ";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        dd($resultSet->fetchAllAssociative());
+
+    }
+
     // /**
     //  * @return Client[] Returns an array of Client objects
     //  */

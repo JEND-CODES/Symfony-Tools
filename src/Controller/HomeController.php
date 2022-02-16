@@ -34,6 +34,11 @@ class HomeController extends AbstractController
         // $clients = $repoClient->findAll();
         // dd($clients);
 
+        //*** RAW SQL QUERIES
+        // $fetchClients = $repoClient->rawSqlQuery();
+        // $fetchProducts = $repoProduct->rawSqlQuery();
+
+        //*** DUMPS TESTS
         // $dumps->dumpByCriteriaInArray($clients, 'name');
 
         // $dumps->dumpGreaterThanInArray($clients, 'name', 7);

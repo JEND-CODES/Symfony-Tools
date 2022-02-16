@@ -16,4 +16,5 @@
 * Handlers
 * Listener
 * Subscriber
+* Raw sql queries
 ```
