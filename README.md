@@ -5,6 +5,7 @@
 ``` bash
 * Dumps
 * createQueryBuilder
+* Raw SQL queries
 * SerializerInterface
 * Json Encode / Json Decode
 * Api Platform configurations
@@ -16,5 +17,4 @@
 * Handlers
 * Listener
 * Subscriber
-* Raw sql queries
 ```
