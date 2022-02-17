@@ -19,6 +19,8 @@ class ControllerSubscriber implements EventSubscriberInterface
     public function eventCurrentController(ControllerEvent $event): void
     {
 
+        // $request = $event->getRequest();
+
         // dd(
         //     $event,
             // $event->getKernel(),
@@ -28,10 +30,19 @@ class ControllerSubscriber implements EventSubscriberInterface
 
             // ACCÉDER AUX DIFFÉRENTES INFORMATIONS DE LA REQUÊTE
             // $event->getRequest()->attributes,
+            // $event->getRequest()->attributes->get('_controller'),
             // $event->getRequest()->server,
             // $event->getRequest()->headers,
+            // $event->getRequest()->headers->all(),
+            // $event->getRequest()->headers->get('accept'),
+            // $event->getRequest()->get('_route')
 
         // );
+
+        // VÉRIFIER QU'UNE ROUTE EST RENCONTRÉE
+        // if ($event->getRequest()->get('_route') === 'products') {
+        //     dd('matched !');
+        // }
 
     }
 

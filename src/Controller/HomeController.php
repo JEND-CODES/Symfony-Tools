@@ -7,6 +7,7 @@ use App\Repository\ProductRepository;
 use App\Service\RequestService;
 use App\Utils\Delay;
 use App\Utils\Dumps;
+use App\Validator\CustomConstraint;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,7 +27,8 @@ class HomeController extends AbstractController
         RequestService $requestService, 
         $_route, 
         Request $request, 
-        Delay $delay
+        Delay $delay,
+        CustomConstraint $customConstraint
         ): Response
     {
         //*** DUMP CLIENTS : FIND ALL
@@ -109,6 +111,12 @@ class HomeController extends AbstractController
 
         //*** FAIRE UN AUDIT DU TEMPS D'AFFICHAGE DE LA PAGE D'ACCUEIL
         // $delay->audit($request->server->get('REQUEST_TIME_FLOAT'), microtime(true));
+
+        //*** CHECK VARIABLE WITH CUSTOM CONSTRAINT
+        // $john = ['John'];
+        // $john = 'John';
+        // $customConstraint->validateString($john);
+        // $customConstraint->validateArray($john);
 
         return $this->render('home/index.html.twig', [
             'clients' => $clients,

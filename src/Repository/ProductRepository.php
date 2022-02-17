@@ -147,6 +147,32 @@ class ProductRepository extends ServiceEntityRepository
 
     }
 
+    public function spentByClient() 
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // Somme totale dépensée pour les achats de produits, pour chaque client
+        $sql = "SELECT 
+                    SUM(product.price) AS spent_sum,
+                    client.name AS client_name
+                FROM 
+                    product
+                INNER JOIN 
+                    client
+                WHERE 
+                    product.client_id = client.id
+                GROUP BY 
+                    product.client_id
+                ";
+
+        $stmt = $conn->prepare($sql);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+
+    }
+
     // /**
     //  * @return Product[] Returns an array of Product objects
     //  */

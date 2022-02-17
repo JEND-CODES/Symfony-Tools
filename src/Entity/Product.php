@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\ProductRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 /**
  * @ORM\Entity(repositoryClass=ProductRepository::class)
@@ -19,16 +21,22 @@ class Product
 
     /**
      * @ORM\Column(type="string", length=80, nullable=true)
+     * 
+     * @SerializedName("custom_product_title")
+     * @Groups({"show_product"})
+     * 
      */
     private $title;
 
     /**
      * @ORM\Column(type="text", nullable=true)
+     *  @Groups({"show_product"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
+     *  @Groups({"show_product"})
      */
     private $price;
 

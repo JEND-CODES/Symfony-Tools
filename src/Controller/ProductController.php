@@ -23,8 +23,12 @@ class ProductController extends AbstractController
     {
         $products = $repoProduct->findBy(array(), array('id' => 'DESC'));
 
-        $allProducts = $serializer->serialize($products, 'json');
+        // $allProducts = $serializer->serialize($products, 'json');
         // $allProducts = $serializer->serialize($products, 'json', []);
+
+        // On peut filtrer les résultats en passant un groupe directement défini dans les annotations de l'entité Product.php -> @Groups({"show_product"})
+        // On peut changer le nom d'une clé du tableau JSON en utilisant l'annotation @SerializedName("custom_name")
+        $allProducts = $serializer->serialize($products, 'json', ['groups' => 'show_product']);
 
         // SÉRIALISER EN IGNORANT UN ATTRIBUT :
         // $allProducts = $serializer->serialize($products, 'json', ['ignored_attributes' => ['client']]);
@@ -51,6 +55,8 @@ class ProductController extends AbstractController
     public function product(ProductRepository $repoProduct, int $id, RequestService $requestService): Response
     { 
         $product = $repoProduct->find($id);
+
+        dd($product);
 
         if(!$product) {
 
@@ -223,6 +229,26 @@ class ProductController extends AbstractController
             "Content-Type" => "application/json",
         ]);
 
+        return $response;
+
+    }
+
+    /**
+     * @Route("/spentproducts", name="spent_products", methods={"GET"})
+     * @param ProductRepository $repoProduct
+     * @return Response
+     */
+    public function spentProducts(ProductRepository $repoProduct, SerializerInterface $serializer, Request $request): Response
+    {
+        // Requête SQL brute qui renvoie la somme totale dépensée pour les achats de produits, pour chaque client :
+        $products = $repoProduct->spentByClient();
+
+        $productsBy = $serializer->serialize($products, 'json');
+
+        $response = new Response($productsBy, 200, [
+            "Content-Type" => "application/json",
+        ]);
+        
         return $response;
 
     }
