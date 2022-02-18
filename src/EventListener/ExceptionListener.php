@@ -32,7 +32,7 @@ class ExceptionListener
             $response = new JsonResponse([
                 'error' => 'not found',
                 'http status' => '404',
-                'error source' => 'ExceptionListener'
+                'message source' => 'ExceptionListener'
             ]);
 
         }

@@ -113,10 +113,18 @@ class HomeController extends AbstractController
         // $delay->audit($request->server->get('REQUEST_TIME_FLOAT'), microtime(true));
 
         //*** CHECK VARIABLE WITH CUSTOM CONSTRAINT
-        // $john = ['John'];
-        // $john = 'John';
-        // $customConstraint->validateString($john);
-        // $customConstraint->validateArray($john);
+        // $variable = 'text';
+        // $customConstraint->validateString($variable);
+        // $variable = ['text'];
+        // $customConstraint->validateArray($variable);
+        // $variable = 1;
+        // $customConstraint->validateInteger($variable);
+        // $variable = 1.5;
+        // $customConstraint->validateFloat($variable);
+        // $variable = true;
+        // $customConstraint->validateBoolean($variable);
+        // $variable = 0.2354;
+        // $customConstraint->validateNumeric($variable);
 
         return $this->render('home/index.html.twig', [
             'clients' => $clients,

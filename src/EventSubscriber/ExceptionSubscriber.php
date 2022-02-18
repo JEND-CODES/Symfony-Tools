@@ -18,7 +18,7 @@ class ExceptionSubscriber implements EventSubscriberInterface
             $data = [
                 'http status' => $exception->getStatusCode(),
                 'message' => 'not found',
-                'error source' => 'ExceptionSubscriber'
+                'message source' => 'ExceptionSubscriber'
             ];
 
             $response = new JsonResponse($data);

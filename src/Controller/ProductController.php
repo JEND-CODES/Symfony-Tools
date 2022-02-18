@@ -2,9 +2,13 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use App\Repository\ClientRepository;
 use App\Repository\ProductRepository;
 use App\Service\RequestService;
+use App\Validator\CustomConstraint;
+use App\Validator\Violations;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -250,6 +254,47 @@ class ProductController extends AbstractController
         ]);
         
         return $response;
+
+    }
+
+    /**
+     * @Route("/createproduct", name="create_product", methods={"GET", "POST"})
+     */
+    public function createProduct(ClientRepository $repoClient, EntityManagerInterface $manager, CustomConstraint $customConstraint, Violations $violations): Response
+    {
+
+        $client = $repoClient->find(1);
+
+        $product = new Product();
+
+        $title = 'ProductX';
+        $description = 'ProductDescriptionX';
+        $price = 120.15;
+
+        // $customConstraint->validateString($title);
+        // $customConstraint->validateString($description);
+        // $customConstraint->validateFloat($price);
+        // $customConstraint->validateObject($client);
+
+        // $violations->checkIfSymbols($title);
+        // $violations->checkTypeLower($title);
+
+        $product->setTitle($title)
+                ->setDescription($description)
+                ->setPrice($price)
+                ->setCreatedAt(new \DateTime())
+                ->setClient($client)
+                ;
+        
+        $manager->persist($product);
+
+        $manager->flush();
+
+        return new Response(
+            'Nouveau produit ajouté !', 
+            200, 
+            ['content-type' => 'text/html']
+        );
 
     }
 

@@ -15,7 +15,7 @@
 * Curl Api (array_filter, array_map)
 * Services
 * Handlers
-* Listener
-* Subscriber
-* Validator
+* Listeners
+* Subscribers
+* Validators
 ```
