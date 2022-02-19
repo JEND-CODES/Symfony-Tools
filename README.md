@@ -113,7 +113,7 @@ public function spentProducts(ProductRepository $repoProduct, SerializerInterfac
 
 | Tool / Method | Folder | Example |
 | ------------- | ------------- | ------------- |
-| json_encode | Controller | product |
+| json_encode | Controller | /product/{id} |
 
 ```
 /**
@@ -150,5 +150,143 @@ public function product(ProductRepository $repoProduct, int $id, RequestService 
 
     return $response;
 
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
+| StopWatch | Controller | watchHomeQueries |
+
+```
+/**
+* @Route("/watchhome", name="watch_home")
+*/
+public function watchHomeQueries(ClientRepository $repoClient, Delay $delay)
+{
+    $stopWatch = new Stopwatch();
+
+    $stopWatch->start('watchHomeQueries');
+
+    $stopWatch->lap('watchHomeQueries');
+
+    $delay->executionDelay(1);
+
+    $stopWatch->lap('watchHomeQueries');
+
+    $repoClient->findBy(array(), array('id' => 'ASC'));
+
+    $stopWatch->lap('watchHomeQueries');
+
+    $repoClient->find(1);
+
+    $stopWatch->lap('watchHomeQueries');
+
+    $repoClient->filterClientsByIdMinAndMax(1, 3);
+
+    $event = $stopWatch->stop('watchHomeQueries');
+
+    dd(
+        $event, 
+
+        $event->getPeriods(),
+
+        "Category the event was started in : " . 
+        $event->getCategory(),
+        
+        "Event start time in milliseconds : " . 
+        $event->getOrigin(), 
+
+        "Stops all periods not already stopped : " . 
+        $event->ensureStopped(), 
+        
+        "Start time of the very first period : " . 
+        $event->getStartTime(),  
+
+        "End time of the very last period : " . 
+        $event->getEndTime(),
+
+        "Event duration, including all periods : " . 
+        $event->getDuration(),   
+
+        "Max memory usage of all periods : " . 
+        $event->getMemory(), 
+
+    );
+
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
+| Request time | Utils | audit |
+
+```
+public function audit(float $reqTime, float $resTime): void
+{
+    $reqMilliSecond = (int) ($reqTime * 1000);
+    $resMilliSecond = (int) ($resTime * 1000);
+    $reqMicroSecond = (int) ($reqTime * 1000000);
+    $resMicroSecond = (int) ($resTime * 1000000);
+
+    $audit = [
+        'milliseconds' => [
+            'req' => $reqMilliSecond,
+            'res' => $resMilliSecond,
+            'elapsed' => $resMilliSecond - $reqMilliSecond,
+        ],
+        'microseconds' => [
+            'req' => $reqMicroSecond,
+            'res' => $resMicroSecond,
+            'elapsed' => $resMicroSecond - $reqMicroSecond,
+        ]
+    ];
+
+    echo '<pre>';
+    var_dump($audit);
+    echo '</pre>';
+
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
+| Curl Api | Controller | curlApiFilterBy |
+
+```
+/**
+* @Route("/curlapifilterby", name="curl_api_filterby")
+*/
+public function curlApiFilterBy(): Response
+{
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, 'https://randomuser.me/api/?results=10');
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    
+    $json_array = json_decode(curl_exec($ch))->results;
+
+    $filterBy = 'male';
+
+    $json_filtered = array_filter($json_array, function ($item) use ($filterBy) {
+
+        return ($item->gender == $filterBy);
+
+    });
+    
+    foreach($json_filtered as $data){
+
+        echo '
+            <p>NAME : '. $data->name->first .'</p>
+            <p>ADDRESS : '. $data->location->street->name .'</p>
+            <p>EMAIL : '. $data->email .'</p>
+            <hr>
+        ';
+
+    }
+
+    return new Response();
 }
 ```
