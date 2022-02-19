@@ -21,9 +21,9 @@
 * Upload Files
 ```
 
-| Tool  | Folder | Example |
+| Tool / Method | Folder | Example |
 | ------------- | ------------- | ------------- |
-| Dumps Class | Utils | dumpInRelationMethod |
+| Class Dumps | Utils | dumpInRelationMethod |
 
 ```
  public function dumpInRelationMethod($itemsQueried, string $methodName, string $relatedMethod) 
@@ -42,7 +42,7 @@
 }
 ```
 
-| Tool  | Folder | Example |
+| Tool / Method  | Folder | Example |
 | ------------- | ------------- | ------------- |
 | createQueryBuilder | Repository | filterProductsByClientName |
 
@@ -60,7 +60,7 @@ public function filterProductsByClientName(string $clientName)
 }
 ```
 
-| Tool  | Folder | Example |
+| Tool / Method | Folder | Example |
 | ------------- | ------------- | ------------- |
 | Raw Sql query | Repository | spentByClient |
 
@@ -87,6 +87,68 @@ public function spentByClient()
     $resultSet = $stmt->executeQuery();
 
     return $resultSet->fetchAllAssociative();
+
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
+| Serializer | Controller | spentProducts |
+
+```
+public function spentProducts(ProductRepository $repoProduct, SerializerInterface $serializer): Response
+{
+    $products = $repoProduct->spentByClient();
+
+    $productsBy = $serializer->serialize($products, 'json');
+
+    $response = new Response($productsBy, 200, [
+        "Content-Type" => "application/json",
+    ]);
+    
+    return $response;
+
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
+| json_encode | Controller | product |
+
+```
+/**
+* @Route("/product/{id}", name="product", requirements={"id": "\d+"}, methods={"GET"})
+*/
+public function product(ProductRepository $repoProduct, int $id, RequestService $requestService): Response
+{ 
+    $product = $repoProduct->find($id);
+
+    if(!$product) {
+
+        $response = new JsonResponse([
+            'uri' => $requestService->getUriInfo(),
+            'error' => 'not found',
+            'http status' => '404'
+        ]);
+
+    } else {
+        
+        $response = new JsonResponse([
+            'uri' => $requestService->getUriInfo(),
+            'result' => 'ok',
+            'http status' => '200',
+            'product' => [
+                'id' => $product->getId(),
+                'title' => $product->getTitle(),
+                'description' => $product->getDescription(),
+                'price' => $product->getPrice(),
+                'createdAt' => $product->getCreatedAt()
+            ]
+        ]);
+
+    }
+
+    return $response;
 
 }
 ```
