@@ -21,7 +21,23 @@
 * Upload Files
 ```
 
-| Tool  | Method |
-| ------------- | ------------- |
-| Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  |
+| Tool  | Folder | Example |
+| ------------- | ------------- | ------------- |
+| Dumps  | Utils | dumpInRelationMethod() |
+
+```
+ public function dumpInRelationMethod($itemsQueried, string $methodName, string $relatedMethod) 
+ {
+
+    $method = 'get'.ucfirst($methodName);
+
+    $related = 'get'.ucfirst($relatedMethod);
+
+    $string = $itemsQueried->$method();
+
+    $result = $string->$related();
+
+    dd($result);
+
+}
+```
