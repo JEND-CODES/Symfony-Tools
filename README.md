@@ -18,7 +18,7 @@
 * Listeners
 * Subscribers
 * Validators / Violations
-* Copy & Upload Files
+* Copy Files / Upload Files
 ```
 
 ### Examples
