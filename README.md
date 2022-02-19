@@ -115,7 +115,7 @@ public function spentProducts(ProductRepository $repoProduct, SerializerInterfac
 
 | Tool / Method | Folder | Example |
 | ------------- | ------------- | ------------- |
-| json_encode | Controller | /product/{id} |
+| JsonResponse | Controller | /product/{id} |
 
 ```
 /**
