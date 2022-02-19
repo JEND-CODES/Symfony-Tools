@@ -30,15 +30,21 @@ class Product
 
     /**
      * @ORM\Column(type="text", nullable=true)
-     *  @Groups({"show_product"})
+     * @Groups({"show_product"})
      */
     private $description;
 
     /**
      * @ORM\Column(type="float", nullable=true)
-     *  @Groups({"show_product"})
+     * @Groups({"show_product"})
      */
     private $price;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     * @Groups({"show_product"})
+     */
+    private $picture;
 
     /**
      * @ORM\Column(type="date", nullable=true)
@@ -111,6 +117,18 @@ class Product
     public function setClient(?Client $client): self
     {
         $this->client = $client;
+
+        return $this;
+    }
+
+    public function getPicture(): ?string
+    {
+        return $this->picture;
+    }
+
+    public function setPicture(?string $picture): self
+    {
+        $this->picture = $picture;
 
         return $this;
     }
