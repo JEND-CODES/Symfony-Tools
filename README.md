@@ -21,6 +21,8 @@
 * Upload Files
 ```
 
+### Examples
+
 | Tool / Method | Folder | Example |
 | ------------- | ------------- | ------------- |
 | Class Dumps | Utils | dumpInRelationMethod |
@@ -288,5 +290,67 @@ public function curlApiFilterBy(): Response
     }
 
     return new Response();
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
+| OverrideListener | EventListener | onKernelController |
+
+```
+namespace App\EventListener;
+ 
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Event\ControllerEvent;
+ 
+class OverrideListener
+{
+    public function onKernelController(ControllerEvent $event)
+    {
+        
+        $message = 'OverrideListener message';
+ 
+        if ($event->getRequest()->get('_route') === 'products') {
+
+            // Override controller response
+            $event->setController(
+
+                function() use ($message) {
+
+                    return new Response($message, 400);
+
+                }
+
+            );
+
+        }
+        
+    }
+
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
+| Upload file | Controller | uploadImage |
+
+```
+/**
+* @Route("/uploadimage", name="upload_image")
+*/
+public function uploadImage(): Response
+{
+    $imageSource = 'http://test.planetcode.fr/images/02.jpg';
+
+    $newImage = $this->getParameter('kernel.project_dir') . '/public/pictures/' . uniqid(). '.jpg';
+
+    file_put_contents($newImage, file_get_contents($imageSource));
+
+    return new Response(
+        'File recorded !', 
+        200, 
+        ['content-type' => 'text/html']
+    );
+
 }
 ```
