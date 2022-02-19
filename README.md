@@ -23,7 +23,7 @@
 
 | Tool  | Folder | Example |
 | ------------- | ------------- | ------------- |
-| Dumps  | Utils | dumpInRelationMethod() |
+| Dumps | Utils | dumpInRelationMethod() |
 
 ```
  public function dumpInRelationMethod($itemsQueried, string $methodName, string $relatedMethod) 
@@ -38,6 +38,24 @@
     $result = $string->$related();
 
     dd($result);
+
+}
+```
+
+| Tool  | Folder | Example |
+| ------------- | ------------- | ------------- |
+| createQueryBuilder | Repository | filterProductsByClientName() |
+
+```
+public function filterProductsByClientName(string $clientName) 
+{
+    $query = $this->createQueryBuilder('p')
+            ->innerJoin('p.client', 'c')
+            ->where('c.name = :clientname')
+            ->setParameter('clientname', $clientName)
+            ->getQuery();
+
+    return $query->getResult();
 
 }
 ```
