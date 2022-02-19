@@ -20,3 +20,8 @@
 * Validators
 * Upload Files
 ```
+
+| Tool  | Method |
+| ------------- | ------------- |
+| Content Cell  | Content Cell  |
+| Content Cell  | Content Cell  |
