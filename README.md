@@ -19,6 +19,7 @@
 * Subscribers
 * Validators / Violations
 * Copy Files / Upload Files
+* Form getData
 ```
 
 ### Examples

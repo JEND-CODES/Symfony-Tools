@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Product;
+use App\Form\ProductType;
 use App\Repository\ClientRepository;
 use App\Repository\ProductRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -298,6 +299,61 @@ class FileController extends AbstractController
             200, 
             ['content-type' => 'text/html']
         );
+    }
+
+    /**
+     * @Route("/newproduct", name="new_product", methods={"GET", "POST"})
+     */
+    public function newProduct(Product $product = null, Request $request, ClientRepository $repoClient, EntityManagerInterface $manager): Response
+    {
+        $client = $repoClient->find(1);
+
+        $product = new Product();
+
+        $createProduct = $this->createForm(ProductType::class, $product);
+
+        $createProduct->handleRequest($request);
+
+        if($createProduct->isSubmitted() && $createProduct->isValid())
+        {
+            $product->setCreatedAt(new \DateTime());
+
+            $product->setClient($client);
+
+            $manager->persist($product);
+
+            // Inspection des données du formulaire
+            $data = $createProduct->getData();
+
+            // On spécifie une donnée précise en appelant la méthode définie dans l'entité Product - ex: $data->getPicture()
+
+            // dd(
+            //     // $data,
+            //     $data->getTitle(),
+            //     $data->getPicture()
+            // );
+
+            // On récupère donc l'url de l'image, pour faire ensuite une copie de cette image dans le dossier /public/pictures/... en lui ajoutant un nouveau nom, assorti d'un identifiant unique
+            $imageSource = $data->getPicture();
+
+            $imageName = ''. $data->getTitle() .'-' . uniqid(). '.jpg';
+
+            $newImage = $this->getParameter('kernel.project_dir') . '/public/pictures/'. $imageName .'';
+
+            file_put_contents($newImage, file_get_contents($imageSource));
+
+            $product->setPicture('pictures/'. $imageName .'');
+
+            $manager->flush();
+
+            return $this->redirectToRoute('home',[
+            ]);
+
+        }
+
+        return $this->render('product/product.html.twig', [
+            'createProduct' => $createProduct->createView()
+        ]);
     }
    
 }
