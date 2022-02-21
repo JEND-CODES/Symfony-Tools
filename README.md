@@ -18,7 +18,7 @@
 * Listeners
 * Subscribers
 * Validators / Violations
-* Copy Files / Upload Files
+* Copy, upload, delete files
 * Form getData
 ```
 
