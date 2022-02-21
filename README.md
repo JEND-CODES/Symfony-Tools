@@ -28,7 +28,7 @@
 | ------------- | ------------- | ------------- |
 | Class Dumps | Utils | dumpInRelationMethod |
 
-```
+```php
  public function dumpInRelationMethod($itemsQueried, string $methodName, string $relatedMethod) 
  {
 
