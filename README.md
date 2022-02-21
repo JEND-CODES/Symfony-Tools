@@ -43,13 +43,13 @@
     dd($result);
 
 }
-``` php
+```
 
 | Tool / Method  | Folder | Example |
 | ------------- | ------------- | ------------- |
 | createQueryBuilder | Repository | filterProductsByClientName |
 
-```
+``` php
 public function filterProductsByClientName(string $clientName) 
 {
     $query = $this->createQueryBuilder('p')
@@ -67,7 +67,7 @@ public function filterProductsByClientName(string $clientName)
 | ------------- | ------------- | ------------- |
 | Raw Sql query | Repository | spentByClient |
 
-```
+``` php
 public function spentByClient() 
 {
     $conn = $this->getEntityManager()->getConnection();
@@ -98,7 +98,7 @@ public function spentByClient()
 | ------------- | ------------- | ------------- |
 | Serializer | Controller | spentProducts |
 
-```
+``` php
 public function spentProducts(ProductRepository $repoProduct, SerializerInterface $serializer): Response
 {
     $products = $repoProduct->spentByClient();
@@ -118,7 +118,7 @@ public function spentProducts(ProductRepository $repoProduct, SerializerInterfac
 | ------------- | ------------- | ------------- |
 | JsonResponse | Controller | /product/{id} |
 
-```
+``` php
 /**
 * @Route("/product/{id}", name="product", requirements={"id": "\d+"}, methods={"GET"})
 */
@@ -160,7 +160,7 @@ public function product(ProductRepository $repoProduct, int $id, RequestService 
 | ------------- | ------------- | ------------- |
 | StopWatch | Controller | watchHomeQueries |
 
-```
+``` php
 /**
 * @Route("/watchhome", name="watch_home")
 */
@@ -223,7 +223,7 @@ public function watchHomeQueries(ClientRepository $repoClient, Delay $delay)
 | ------------- | ------------- | ------------- |
 | Request time | Utils | audit |
 
-```
+``` php
 public function audit(float $reqTime, float $resTime): void
 {
     $reqMilliSecond = (int) ($reqTime * 1000);
@@ -255,7 +255,7 @@ public function audit(float $reqTime, float $resTime): void
 | ------------- | ------------- | ------------- |
 | Curl Api | Controller | curlApiFilterBy |
 
-```
+``` php
 /**
 * @Route("/curlapifilterby", name="curl_api_filterby")
 */
@@ -298,7 +298,7 @@ public function curlApiFilterBy(): Response
 | ------------- | ------------- | ------------- |
 | OverrideListener | EventListener | onKernelController |
 
-```
+``` php
 namespace App\EventListener;
  
 use Symfony\Component\HttpFoundation\Response;
@@ -335,7 +335,7 @@ class OverrideListener
 | ------------- | ------------- | ------------- |
 | Upload file | Controller | uploadImage |
 
-```
+``` php
 /**
 * @Route("/uploadimage", name="upload_image")
 */
