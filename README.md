@@ -43,7 +43,7 @@
     dd($result);
 
 }
-```
+``` php
 
 | Tool / Method  | Folder | Example |
 | ------------- | ------------- | ------------- |
