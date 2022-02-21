@@ -90,12 +90,49 @@ class ClientRepository extends ServiceEntityRepository
         //         SELECT `title` FROM product
         //         ';
 
-        $sql = "SELECT `id`, `name` FROM client
-                WHERE `name` = 'helloWorld'
-                UNION ALL
-                SELECT `id`, `title` FROM product
-                WHERE `title` = 'Product1'
-                ";
+        // $sql = "SELECT `id`, `name` FROM client
+        //         WHERE `name` = 'helloWorld'
+        //         UNION ALL
+        //         SELECT `id`, `title` FROM product
+        //         WHERE `title` = 'Product1'
+        //         ";
+
+        // TRIER ALPHABÉTIQUEMENT LES RÉSULTATS UNIS DE DEUX TABLES
+        // $sql = "SELECT `name` FROM client
+        //         UNION ALL
+        //         SELECT `title` FROM product
+        //         ORDER BY `name` ASC
+        //         ";
+
+        // FUSIONNER DEUX TABLES QUI NE COMPORTENT PAS LE MÊME NOMBRE DE COLONNE, OU LES MÊMES NOMS DE COLONNES
+        // $sql = "SELECT 'client' AS table_name, `id`, null AS `title`, null AS `description`
+        //         FROM client
+        //         UNION ALL
+        //         SELECT 'product' AS table_name, `id`, null AS `name`, null AS `theme`
+        //         FROM product
+        //         ORDER BY `id` DESC
+        //         ";
+
+        // COMMANDE INTERSECT : PERMET DE RÉCUPÉRER LES VALEURS QUI SONT PRÉSENTES DE FAÇON IDENTIQUES DANS DEUX TABLES
+        // Pour cet exemple, les deux tables ne comportant pas le même nombre d'IDs, la requête renvoie seulement les IDs en commun entre les deux tables
+        // Cf. https://sql.sh/cours/intersect
+        // $sql = 'SELECT DISTINCT `id` FROM `client`
+        //         WHERE `id` IN (
+        //         SELECT `id` 
+        //         FROM `product`
+        //         )
+        //         ORDER BY `id` ASC
+        //         ';
+
+        // COMMANDE -> NOT IN -> à l'inverse de l'exemple précédent, si l'on souhaite récupérer des valeurs qui ne sont pas communes aux deux tables :
+        $sql = 'SELECT DISTINCT `id` FROM `product`
+                WHERE `id` NOT IN (
+                SELECT `id` 
+                FROM `client`
+                )
+                ORDER BY `id` ASC
+                ';
+
 
         $stmt = $conn->prepare($sql);
 

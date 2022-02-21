@@ -355,5 +355,54 @@ class FileController extends AbstractController
             'createProduct' => $createProduct->createView()
         ]);
     }
+
+    /**
+     * @Route("/deleteimage", name="delete_image")
+     */
+    public function deleteImage(ProductRepository $repoProduct, EntityManagerInterface $manager): Response
+    {
+        $product = $repoProduct->find(21);
+        
+        $imageProduct = $product->getPicture();
+
+        $fileName = str_replace('pictures/', '', $imageProduct); 
+
+        // dd($fileName);
+        // $projectDir = $this->getParameter('kernel.project_dir') . '/public/pictures/';
+        // dd(scandir($projectDir));
+        // $files = scandir($projectDir);
+        // dd($files);
+
+        $filePath = $this->getParameter('kernel.project_dir') . '/public/pictures/' . $fileName;
+
+        if (file_exists($filePath)) {
+            
+            // dd(
+            //     $fileName,
+            //     $filePath
+            // );
+
+            // Suppression du fichier
+            unlink($filePath);
+
+            // + Valeur nulle en base de données
+            $product->setPicture(null);
+
+            $manager->persist($product);
+
+            $manager->flush();
+
+        } /* else {
+
+            dd('file not found');
+            
+        } */
+
+        return new Response(
+            'Image du produit supprimée !', 
+            200, 
+            ['content-type' => 'text/html']
+        );
+    }
    
 }

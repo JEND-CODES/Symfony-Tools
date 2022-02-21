@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Repository\ClientRepository;
 use App\Repository\ProductRepository;
+use App\Service\EncryptDecrypt;
 use App\Service\RequestService;
 use App\Utils\Delay;
 use App\Utils\Dumps;
@@ -28,7 +29,8 @@ class HomeController extends AbstractController
         $_route, 
         Request $request, 
         Delay $delay,
-        CustomConstraint $customConstraint
+        CustomConstraint $customConstraint,
+        EncryptDecrypt $encryptDecrypt
         ): Response
     {
         //*** DUMP CLIENTS : FIND ALL
@@ -39,6 +41,7 @@ class HomeController extends AbstractController
         //*** RAW SQL QUERIES
         // $fetchClients = $repoClient->rawSqlQuery();
         // $fetchProducts = $repoProduct->rawSqlQuery();
+        // dd($fetchClients);
 
         //*** DUMPS TESTS
         // $dumps->dumpByCriteriaInArray($clients, 'name');
@@ -125,6 +128,10 @@ class HomeController extends AbstractController
         // $customConstraint->validateBoolean($variable);
         // $variable = 0.2354;
         // $customConstraint->validateNumeric($variable);
+
+        //*** ENCRYPT-DECRYPT SERVICE
+        // $encrypted = $encryptDecrypt->encrypt('symfony');
+        // $encryptDecrypt->decrypt($encrypted);
 
         return $this->render('home/index.html.twig', [
             'clients' => $clients,
