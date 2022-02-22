@@ -125,14 +125,81 @@ class ClientRepository extends ServiceEntityRepository
         //         ';
 
         // COMMANDE -> NOT IN -> à l'inverse de l'exemple précédent, si l'on souhaite récupérer des valeurs qui ne sont pas communes aux deux tables :
-        $sql = 'SELECT DISTINCT `id` FROM `product`
-                WHERE `id` NOT IN (
-                SELECT `id` 
-                FROM `client`
-                )
-                ORDER BY `id` ASC
-                ';
+        // $sql = 'SELECT DISTINCT `id` FROM `product`
+        //         WHERE `id` NOT IN (
+        //         SELECT `id` 
+        //         FROM `client`
+        //         )
+        //         ORDER BY `id` ASC
+        //         ';
 
+        // RECHERCHE LA CLÉ ÉTRANGÈRE DU CLIENT LA PLUS RÉPÉTÉE DANS LA TABLE PRODUCT
+        // $sql = "SELECT client.id, client.name 
+        //         FROM client 
+        //         WHERE client.id = (
+        //             SELECT client_id 
+        //             FROM product 
+        //             GROUP BY product.client_id 
+        //             ORDER BY COUNT(*) DESC 
+        //             LIMIT 1
+        //             )
+        //         ";
+
+        // RECHERCHE LA CLÉ ÉTRANGÈRE DU CLIENT LA MOINS RÉPÉTÉE DANS LA TABLE PRODUCT
+        // $sql = "SELECT client.id, client.name 
+        //         FROM client 
+        //         WHERE client.id = (
+        //             SELECT client_id 
+        //             FROM product 
+        //             GROUP BY product.client_id 
+        //             ORDER BY COUNT(*) ASC 
+        //             LIMIT 1
+        //             )
+        //         ";
+
+        // AFFICHE LA LISTE DES CLIENTS QUI N'ONT PAS ENCORE ACHETÉ UN PRODUIT
+        // $sql = "SELECT client.name
+        //         FROM client
+        //         WHERE id NOT IN (
+        //             SELECT product.client_id 
+        //             FROM product
+        //             )
+        //         ";
+
+        // AFFICHE LE CLIENT QUI A ACHETE LE PLUS DE PRODUITS
+        // $sql = "SELECT 
+        //         client.id, 
+        //         client.name,
+        //         COUNT(product.client_id) AS 'spentmost'
+        //     FROM client 
+        //     INNER JOIN product ON client.id = product.client_id 
+        //     GROUP BY client.id, client.name
+        //     HAVING spentmost =  (       
+        //         SELECT COUNT(product.client_id) AS spentmost
+        //         FROM product
+        //         GROUP BY client_id
+        //         ORDER BY spentmost DESC
+        //         LIMIT 1
+        //     )
+        //     ";
+
+        // La même recherche dans un format simplifié !
+        // $sql = "SELECT product.client_id, client.name, COUNT(*) AS 'spentmost'
+        //         FROM product 
+        //         JOIN client
+        //         ON product.client_id = client.id
+        //         GROUP BY product.client_id
+        //         LIMIT 1
+        //         ";
+
+        // AFFICHE LES 2 MEILLEURS ACHETEURS DE PRODUITS
+        $sql = "SELECT product.client_id, client.name, COUNT(*) AS 'spentmost'
+                FROM product 
+                JOIN client
+                ON product.client_id = client.id
+                GROUP BY product.client_id
+                LIMIT 2
+                ";
 
         $stmt = $conn->prepare($sql);
 

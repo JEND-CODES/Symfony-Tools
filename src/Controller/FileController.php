@@ -336,6 +336,10 @@ class FileController extends AbstractController
             // On récupère donc l'url de l'image, pour faire ensuite une copie de cette image dans le dossier /public/pictures/... en lui ajoutant un nouveau nom, assorti d'un identifiant unique
             $imageSource = $data->getPicture();
 
+            // Autre manière d'utiliser getData() sans spécifier le getter de l'entité :
+            // $pictureSource = $createProduct->get('picture')->getData();
+            // dd($pictureSource);
+
             $imageName = ''. $data->getTitle() .'-' . uniqid(). '.jpg';
 
             $newImage = $this->getParameter('kernel.project_dir') . '/public/pictures/'. $imageName .'';

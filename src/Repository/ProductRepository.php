@@ -126,20 +126,126 @@ class ProductRepository extends ServiceEntityRepository
 
         // DÉPENSES MOYENNES EFFECTUÉES PAR CHAQUE CLIENT :
         // Cela renvoie la somme moyenne dépensée pour les achats de produits, pour chaque client :
-        $sql = "SELECT 
-                    AVG(product.price) AS spent_avg,
-                    client.name AS client_name
-                FROM 
-                    product
-                INNER JOIN 
-                    client
-                WHERE 
-                    product.client_id = client.id
-                GROUP BY 
-                    product.client_id
+        // $sql = "SELECT 
+        //             AVG(product.price) AS spent_avg,
+        //             client.name AS client_name
+        //         FROM 
+        //             product
+        //         INNER JOIN 
+        //             client
+        //         WHERE 
+        //             product.client_id = client.id
+        //         GROUP BY 
+        //             product.client_id
+        //         ";
+
+        // PASSER UN PARAMÈTRE ASSOCIÉ À UNE VARIABLE
+        // $param1 = 20;
+
+        // $sql = "SELECT product.title, product.price 
+        //         FROM product 
+        //         WHERE product.price <= :param1
+        //         ";
+
+        // PASSER 2 PARAMÈTRES
+        // $param1 = 20;
+        // $param2 = 50;
+
+        // $sql = "SELECT product.title, product.price 
+        //         FROM product 
+        //         WHERE product.price BETWEEN :param1 AND :param2
+        //         ";
+
+        // $sql = "SELECT product.title, product.price 
+        //         FROM product 
+        //         WHERE product.price >= :param1
+        //         AND product.price <= :param2
+        //         ";
+
+        // PASSER PLUSIEURS VALEURS D'UN ARRAY DANS LA REQUÊTE
+        // $values = array('20', '30', '40');
+        // $values = "'" . implode("','", $values) . "'";
+
+        // $sql = "SELECT product.title 
+        //         FROM product 
+        //         WHERE product.price IN (" . $values . ")
+        //         ";
+
+        // CALCULER LE PRIX MOYEN DE TOUS LES PRODUITS
+        // $sql = "SELECT sum(price) / count(price) 
+        //         AS 'medium_price'
+        //         FROM product
+        //         ";
+
+        // CALCULER LE NOMBRE DE PRODUITS DONT LE PRIX DÉPASSE UNE VALEUR
+        // $sql = "SELECT COUNT(*) AS 'total'
+        //         FROM product
+        //         WHERE product.price >= 50
+        //         ";
+
+        // AFFICHER LE PRODUIT DONT LE PRIX EST LE PLUS BAS
+        // $sql = "SELECT product.title, product.price 
+        //         FROM product 
+        //         WHERE product.price = (
+        //             SELECT MIN(product.price)
+        //             FROM product
+        //             )
+        //         ";
+
+        // Ce qui équivaut à :
+        // $sql = "SELECT product.title, product.price 
+        //         FROM product 
+        //         ORDER BY product.price ASC
+        //         LIMIT 1
+        //         ";
+
+        // AFFICHER LE PRODUIT DONT LE PRIX EST LE PLUS ÉLEVÉ
+        // $sql = "SELECT product.title, product.price 
+        //         FROM product 
+        //         WHERE product.price = (
+        //             SELECT MAX(product.price)
+        //             FROM product
+        //             )
+        //         ";
+
+        // AFFICHE LES 3 PRODUITS LES PLUS CHERS
+        // $sql = "SELECT product.title, product.price 
+        //         FROM product 
+        //         ORDER BY product.price DESC
+        //         LIMIT 3
+        //         ";
+
+        // AFFICHE TOUS LES PRODUITS DONT LE NOM COMMENCE PAR LA LETTRE P
+        // $sql = "SELECT * 
+        //         FROM product 
+        //         WHERE product.title 
+        //         LIKE 'P%'
+        //         ";
+
+        // AFFICHE TOUS LES PRODUITS DONT LE NOM CONTIENT LA LETTRE P
+        // $sql = "SELECT * 
+        //         FROM product 
+        //         WHERE product.title 
+        //         LIKE '%P%'
+        //         ";
+
+        // AFFICHE TOUS LES PRODUITS DONT LES PRIX SONT SUPÉRIEURS AU PRIX MOYEN DE TOUS LES PRODUITS
+        $sql = "SELECT * 
+                FROM product 
+                WHERE product.price > (
+                    SELECT sum(product.price)/count(product.price)
+                    FROM product
+                    ) 
                 ";
 
         $stmt = $conn->prepare($sql);
+
+        // bindParam -> LIE UN PARAMÈTRE À UN NOM DE VARIABLE SPÉCIFIQUE
+        // $stmt->bindParam(':param1', $param1);
+        // $stmt->bindParam(':param2', $param2);
+
+        // bindValue -> ASSOCIE UNE VALEUR À UN PARAMÈTRE
+        // $stmt->bindValue(':param1', $param1);
 
         $resultSet = $stmt->executeQuery();
 
