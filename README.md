@@ -6,6 +6,7 @@
 * Dumps
 * createQueryBuilder
 * Raw SQL queries
+* bindParam / bindValue
 * SerializerInterface
 * Json Encode / Json Decode
 * Api Platform configurations
