@@ -22,7 +22,7 @@ class Product
     /**
      * @ORM\Column(type="string", length=80, nullable=true)
      * 
-     * @SerializedName("custom_product_title")
+     * @SerializedName("title")
      * @Groups({"show_product"})
      * 
      */

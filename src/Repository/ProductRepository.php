@@ -54,6 +54,53 @@ class ProductRepository extends ServiceEntityRepository
         return $query->getSingleScalarResult();
     }
 
+    // Filtre les produits avec les paramètres limite et décalage
+    public function filterProductsWith(int $limit, int $offset) 
+    {
+        $query = $this->createQueryBuilder('p')
+                ->setFirstResult($offset)
+                ->setMaxResults($limit)
+                ->orderBy('p.id', 'ASC')
+                ->getQuery();
+
+        return $query->getResult();
+
+    }
+
+    public function queryProductsWith(int $limit, int $offset) 
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        // Exemple de concaténations de paramètres de la fonction
+        $sql = "SELECT *
+                FROM product
+                ORDER BY product.id ASC
+                LIMIT " . $offset . " , " . $limit . "
+                ";
+
+        // $sql = "SELECT *
+        //         FROM product
+        //         ORDER BY product.id ASC
+        //         LIMIT {$offset}, {$limit}
+        //         ";
+
+        // $sql = "SELECT *
+        //         FROM product
+        //         ORDER BY product.id ASC
+        //         LIMIT :offset , :limitation
+        //         ";
+
+        $stmt = $conn->prepare($sql);
+
+        // $stmt->bindParam(':limitation', $limit, \PDO::PARAM_INT);
+        // $stmt->bindValue(':offset', $offset, \PDO::PARAM_INT);
+
+        $resultSet = $stmt->executeQuery();
+
+        return $resultSet->fetchAllAssociative();
+
+    }
+
     public function rawSqlQuery() 
     {
         $conn = $this->getEntityManager()->getConnection();

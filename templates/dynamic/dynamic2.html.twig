@@ -1,0 +1,167 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Dynamic2 Tests{% endblock %}
+
+{% block body %}
+
+<div id="products">
+
+    <p class="product">
+
+        {% for product in products %}
+
+            {{ product.title|raw }}
+
+        {% endfor %}
+
+    </p>
+
+</div>
+
+<button id="next-product-btn">NEXT PRODUCT</button>
+
+<button id="prev-product-btn">PREVIOUS PRODUCT</button>
+
+{% endblock %}
+
+{% block javascripts %}
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+<script>
+
+$(document).ready(function () {
+
+    var clicked = 0;
+
+    $("#next-product-btn").click(function() {
+
+        clicked++;  
+
+        var limit = 1;
+
+        // Décalage
+        // var offset = 0 + clicked;
+        var offset = clicked;
+
+        $.ajax({
+            type:"GET",
+
+            url:"{{ path('limit_offset2') }}/" + limit + "/" + offset,
+            
+            dataType: "json",
+
+            beforeSend: function(jqXHR, settings) {
+                console.log(settings.url);
+            },
+
+            success: function(data) {
+
+                $(".product").html();
+
+                // console.log(data);
+
+                for (let item in data) {
+                
+                    $(".product").text(data[item].title);
+
+                }
+
+            },
+
+            error: function (error) {
+                console.log(error);
+            }
+
+        });
+
+        /* fetch("{{ path('limit_offset2') }}/" + limit + "/" + offset)
+        .then((response) => {
+
+            return response.json();
+
+        })
+        .then((data) => {
+
+            $(".product").html();
+
+            for (let item in data) {
+            
+                $(".product").text(data[item].title);
+
+            }
+            
+        })
+        .catch((err) => {
+            console.log("Error", err);
+        }); */
+
+    });
+
+    $("#prev-product-btn").click(function() {
+
+        if (clicked > 0) {
+            clicked--; 
+        } 
+
+        var limit = 1;
+
+        var offset = clicked;
+
+        $.ajax({
+            type:"GET",
+
+            url:"{{ path('limit_offset2') }}/" + limit + "/" + offset,
+            
+            dataType: "json",
+
+            beforeSend: function(jqXHR, settings) {
+                console.log(settings.url);
+            },
+
+            success: function(data) {
+
+                $(".product").html();
+
+                for (let item in data) {
+                
+                    $(".product").text(data[item].title);
+
+                }
+
+            },
+
+            error: function (error) {
+                console.log(error);
+            }
+
+        });
+
+        /* fetch("{{ path('limit_offset2') }}/" + limit + "/" + offset)
+        .then((response) => {
+
+            return response.json();
+
+        })
+        .then((data) => {
+
+            $(".product").html();
+
+            for (let item in data) {
+            
+                $(".product").text(data[item].title);
+
+            }
+            
+        })
+        .catch((err) => {
+            console.log("Error", err);
+        }); */
+
+    });
+    
+});
+
+</script>
+
+{% endblock %}
