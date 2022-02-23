@@ -13,6 +13,7 @@
 * StopWatch
 * Calculation delay request
 * Pagination (start, limit)
+* Ajax Json Data dynamically
 * Curl Api (array_filter, array_map)
 * Services
 * Handlers
