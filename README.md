@@ -22,6 +22,8 @@
 * Validators / Violations
 * Copy, upload, delete files
 * Form getData
+* Scraping
+* CSV exports
 ```
 
 ### Examples
