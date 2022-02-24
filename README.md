@@ -30,6 +30,49 @@
 
 | Tool / Method | Folder | Example |
 | ------------- | ------------- | ------------- |
+| Crawler | Controller | scrapingTable |
+
+```php
+public function scrapingTable()
+{
+    $ch = curl_init();
+
+    curl_setopt($ch, CURLOPT_URL, "https://fr.wikipedia.org/wiki/Langues_en_Europe");
+
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+
+    $html = curl_exec($ch);
+
+    curl_close($ch);
+
+    $crawler = new Crawler($html);
+
+    $tableElements = $crawler->filter("table tr");
+
+    foreach ($tableElements as $i => $content) {
+        
+        $tds = array();
+
+        $crawler = new Crawler($content);
+
+        foreach ($crawler->filter('td') as $i => $node) {
+
+            if($i < 2) {
+                $tds[] = $node->nodeValue;
+            }
+
+        }
+        $rows[] = $tds;
+
+    }
+
+    dd($rows);
+
+}
+```
+
+| Tool / Method | Folder | Example |
+| ------------- | ------------- | ------------- |
 | Class Dumps | Utils | dumpInRelationMethod |
 
 ```php
